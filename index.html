@@ -251,7 +251,8 @@ function removeCart(index){
 function filterProducts(){
  const q=document.getElementById('search').value.toLowerCase();
  document.querySelectorAll('.product').forEach(p=>p.style.display=p.dataset.name.toLowerCase().includes(q)?'block':'none');
-}function openDetail(el){
+}
+function openDetail(el){
   const name = el.getAttribute('data-name');
   const desc = 'High quality ' + name + ' — original product, best suited for robotics, Arduino and electronics projects.';
   const priceDiv = el.querySelector('div[class^="price"]');
