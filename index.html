@@ -188,17 +188,57 @@ footer{background:#04142d;color:#dbeafe;padding:42px 5% 18px}.foot{display:grid;
   <div><h3>ROBO HOOK</h3><p>Your trusted source for sensors, modules and electronic components for projects, automation and robotics.</p></div>
   <div><h3>QUICK LINKS</h3><a href="#">About Us</a><a href="#">Shipping & Delivery</a><a href="#">Return Policy</a><a href="#">Terms & Conditions</a></div>
   <div><h3>CATEGORIES</h3><a href="#categories">Sensors</a><a href="#categories">Modules</a><a href="#categories">Arduino</a><a href="#categories">ESP32 / ESP8266</a></div>
-  <div><h3>CONTACT</h3><p>📞 +91 XXXXX XXXXX</p><p>✉️ support@robohook.com</p><p>🕒 Mon–Sat: 10 AM–7 PM</p></div>
+  <div><h3>CONTACT</h3><p>📞 +91 8824400831</p><p>✉️ support@robohook.com</p><p>🕒 Mon–Sat: 10 AM–7 PM</p></div>
 </div>
 <div class="copy">© 2026 Robo Hook. All Rights Reserved.</div>
 </footer>
 
 <a class="cart" href="#" onclick="showCart();return false;">🛒<sup id="count">0</sup></a>
 
+<div id="cartPanel" style="display:none;position:fixed;right:18px;bottom:85px;width:280px;max-height:400px;overflow-y:auto;background:#fff;border-radius:12px;box-shadow:0 10px 40px #0004;padding:15px;z-index:6;">
+  <h3 style="margin-bottom:10px;">Your Cart</h3>
+  <div id="cartItems"></div>
+  <div id="cartEmpty" style="color:#64748b;font-size:13px;">Cart is empty</div>
+</div>
+
 <script>
-let cart=0;
-function addCart(name){cart++;document.getElementById('count').textContent=cart;alert(name+' added to cart!');}
-function showCart(){alert(cart?('Your cart has '+cart+' item(s).'): 'Your cart is empty.');}
+let cart=[];
+
+function addCart(name){
+  cart.push(name);
+  document.getElementById('count').textContent=cart.length;
+  updateCartUI();
+}
+
+function showCart(){
+  const panel=document.getElementById('cartPanel');
+  panel.style.display = panel.style.display==='none' ? 'block' : 'none';
+  updateCartUI();
+}
+
+function updateCartUI(){
+  const itemsDiv=document.getElementById('cartItems');
+  const emptyDiv=document.getElementById('cartEmpty');
+  itemsDiv.innerHTML='';
+  if(cart.length===0){
+    emptyDiv.style.display='block';
+  } else {
+    emptyDiv.style.display='none';
+    cart.forEach((item,i)=>{
+      const row=document.createElement('div');
+      row.style='display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;font-size:13px;';
+      row.innerHTML=`<span>${item}</span><button onclick="removeCart(${i})" style="background:#e11d48;color:#fff;border:0;border-radius:4px;padding:2px 8px;cursor:pointer;">✕</button>`;
+      itemsDiv.appendChild(row);
+    });
+  }
+}
+
+function removeCart(index){
+  cart.splice(index,1);
+  document.getElementById('count').textContent=cart.length;
+  updateCartUI();
+}
+
 function filterProducts(){
  const q=document.getElementById('search').value.toLowerCase();
  document.querySelectorAll('.product').forEach(p=>p.style.display=p.dataset.name.toLowerCase().includes(q)?'block':'none');
